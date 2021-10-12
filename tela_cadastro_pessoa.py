@@ -64,7 +64,7 @@ class TelaCadPessoa(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Cadastro de Dados do Cliente"))
         self.label.setText(_translate("MainWindow", "Cadastro Cliente"))
         self.label_2.setText(_translate("MainWindow", "Nome:"))
         self.label_3.setText(_translate("MainWindow", "CPF:"))

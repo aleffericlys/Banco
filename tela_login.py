@@ -52,7 +52,7 @@ class TelaLogin(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Tela de Login"))
         self.pushButton.setText(_translate("MainWindow", "login"))
         self.label.setText(_translate("MainWindow", "CPF:"))
         self.label_2.setText(_translate("MainWindow", "Senha:"))

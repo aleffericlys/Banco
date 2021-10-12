@@ -40,7 +40,7 @@ class TelaInicial(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Tela Inicial"))
         self.pushButton.setText(_translate("MainWindow", "acessar conta"))
         self.pushButton_2.setText(_translate("MainWindow", "Criar Conta"))
         self.pushButton_3.setText(_translate("MainWindow", "Deposito"))

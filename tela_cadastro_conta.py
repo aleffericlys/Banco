@@ -58,7 +58,7 @@ class TelaCadConta(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Cadastro de Dados da Conta"))
         self.label_4.setText(_translate("MainWindow", "Limite"))
         self.label.setText(_translate("MainWindow", "Cadastro Conta"))
         self.label_2.setText(_translate("MainWindow", "Numero:"))
