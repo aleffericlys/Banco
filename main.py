@@ -1,5 +1,6 @@
-from conta import Conta, Cliente
-
+from conta import Conta
+from cliente import Cliente
+ 
 p1 = Cliente('aleff', 'erl', '123455')
 p2 = Cliente('Ffela', 'lre', '554321')
 c = Conta('1234', p1, 500, 1000 )

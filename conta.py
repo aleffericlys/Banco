@@ -1,9 +1,10 @@
 import datetime
+from cliente import Cliente
 
 class Conta:
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_limite', '_historico' ]
-	def __init__(self, numero, titular, saldo, limite = 1000):
+	def __init__(self, numero, titular : Cliente, saldo, limite = 1000):
 		self._numero = numero
 		self._titular = titular
 		self._saldo = saldo
@@ -89,44 +90,6 @@ class Conta:
 				return False
 		else:
 			return False
-
-
-class Cliente:
-
-	__slots__ = ['_nome', '_sobrenome', '_cpf' ]
-	def __init__(self, nome, sobrenome, cpf):
-		self._nome = nome
-		self._sobrenome = sobrenome
-		self._cpf = cpf
-
-	@property
-	def nome(self):
-		return self._nome
-	
-	@nome.setter
-	def nome(self, nome):
-		self._nome = nome
-
-	@property
-	def sobrenome(self):
-		return self._sobrenome
-	
-	@sobrenome.setter
-	def sobrenome(self, sobrenome):
-		self._sobrenome = sobrenome
-
-	@property
-	def cpf(self):
-		return self._cpf
-	
-	@cpf.setter
-	def cpf(self, cpf):
-		self._cpf = cpf
-
-	def imprimir(self):
-		print("Nome: ", self.nome)
-		print("Sobrenome: ", self.sobrenome)
-		print("CPF: ", self.cpf)
 
 
 class Historico:
