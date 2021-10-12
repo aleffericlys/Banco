@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class TelaCadConta(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
@@ -64,3 +64,13 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Numero:"))
         self.pushButton.setText(_translate("MainWindow", "Cadastro"))
         self.label_3.setText(_translate("MainWindow", "Saldo:"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = TelaCadConta()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())
