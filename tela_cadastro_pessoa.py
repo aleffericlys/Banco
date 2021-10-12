@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class TelaCadPessoa(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
@@ -71,3 +71,13 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Endereço:"))
         self.label_5.setText(_translate("MainWindow", "Nascimento:"))
         self.pushButton.setText(_translate("MainWindow", "Proximo"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = TelaCadPessoa()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())

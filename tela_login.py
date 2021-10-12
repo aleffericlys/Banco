@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class TelaLogin(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
@@ -57,3 +57,13 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "CPF:"))
         self.label_2.setText(_translate("MainWindow", "Senha:"))
         self.label_3.setText(_translate("MainWindow", "Login"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = TelaLogin()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())

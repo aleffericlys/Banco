@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class TelaInicial(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
@@ -44,3 +44,13 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "acessar conta"))
         self.pushButton_2.setText(_translate("MainWindow", "Criar Conta"))
         self.pushButton_3.setText(_translate("MainWindow", "Deposito"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = TelaInicial()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())
