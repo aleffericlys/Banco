@@ -69,7 +69,7 @@ class Tela_Operacoes(object):
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Saque", None))
         self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Hist\u00f3rico", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Extrato", None))
-        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Sair", None))
+        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Sair da Conta", None))
     # retranslateUi
 
 def main():

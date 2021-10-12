@@ -63,7 +63,7 @@ class TelaCadConta(object):
         self.label.setText(_translate("MainWindow", "Cadastro Conta"))
         self.label_2.setText(_translate("MainWindow", "Numero:"))
         self.pushButton.setText(_translate("MainWindow", "Cadastro"))
-        self.label_3.setText(_translate("MainWindow", "Saldo:"))
+        self.label_3.setText(_translate("MainWindow", "Senha:"))
 
 
 if __name__ == "__main__":
