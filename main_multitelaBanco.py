@@ -3,12 +3,17 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
 from PyQt5.QtCore import QCoreApplication
+from cliente import Cliente
 
 from conta import Conta, Historico
 from tela_operacoes import Tela_Operacoes
 from tela_saque import Tela_Saque
 from tela_transferencia import Tela_Transferencia
 from tela_extrato import Tela_Extrato
+from tela_cadastro_conta import Tela_Cadastro_Conta
+from tela_cadastro_pessoa import Tela_Cadastro_Pessoa
+from tela_incial import Tela_Inicial
+from tela_login import Tela_Login
 
 class Ui_Main(QtWidgets.QWidget):
     def setupUi(self, Main):
@@ -21,18 +26,22 @@ class Ui_Main(QtWidgets.QWidget):
         self.stack1 = QtWidgets.QMainWindow()
         self.stack2 = QtWidgets.QMainWindow()
         self.stack3 = QtWidgets.QMainWindow()
+        self.stack4 = QtWidgets.QMainWindow()
+        self.stack5 = QtWidgets.QMainWindow()
+        self.stack6 = QtWidgets.QMainWindow()
+        self.stack7 = QtWidgets.QMainWindow()
 
-        self.tela_inicial = Tela_Operacoes()
-        self.tela_inicial.setupUi(self.stack0)
+        self.tela_operacoes = Tela_Operacoes()
+        self.tela_operacoes.setupUi(self.stack0)
 
-        self.tela_cadastro = Tela_Transferencia()
-        self.tela_cadastro.setupUi(self.stack1)
+        self.tela_transferencia = Tela_Transferencia()
+        self.tela_transferencia.setupUi(self.stack1)
 
-        self.tela_busca = Tela_Saque()
-        self.tela_busca.setupUi(self.stack2)
+        self.tela_saque = Tela_Saque()
+        self.tela_saque.setupUi(self.stack2)
 
-        self.tela_busca = Tela_Extrato()
-        self.tela_busca.setupUi(self.stack3)
+        self.tela_extrato = Tela_Extrato()
+        self.tela_extrato.setupUi(self.stack3)
 
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
@@ -44,7 +53,6 @@ class Main(QMainWindow, Ui_Main):
         super(Main, self).__init__(parent)
         self.setupUi(self)
     
-        self.operacao = Conta()
         self.tela_operacoes.pushButton.clicked.connect(self.abrirTelaTransferencia)
         self.tela_operacoes.pushButton_2.clicked.connect(self.abrirTelaSaque)
         self.tela_operacoes.pushButton_3.clicked.connect(self.abrirTelaExtrato)
@@ -55,14 +63,14 @@ class Main(QMainWindow, Ui_Main):
         self.tela_extrato.pushButton.clicked.connect(self.botaoVoltar)
         self.tela_operacoes.pushButton_5.clicked.connect(self.botaoSair)
 
-    def botaoCadastrar(self):
-        nome = self.tela_cadastro.lineEdit.text()
-        endereco = self.tela_cadastro.lineEdit_2.text()
-        cpf = self.tela_cadastro.lineEdit_3.text()
-        nascimento = self.tela_cadastro.lineEdit_4.text()
-        if not(nome == '' or endereco == '' or cpf == '' or nascimento == ''):
-            p = Pessoa(nome, endereco, cpf, nascimento)
-            if (self.cad.cadastrar(p)):
+    def botaoTransferir(self):
+        pass
+        '''
+        conta_destino = self.tela_transferencia.lineEdit.text()
+        valor = self.tela_transferencia.lineEdit_2.text()
+        if not(conta_destino == '' or valor == ''):
+            c = Conta.transferir(conta_destino, valor)
+            if (self.operacao.(c)):
                 QMessageBox.information(None, 'POO2', 'Cadastro realizado com sucesso!')
                 self.tela_cadastro.lineEdit.setText('')
                 self.tela_cadastro.lineEdit_2.setText('')
@@ -74,8 +82,11 @@ class Main(QMainWindow, Ui_Main):
             QMessageBox.information(None, 'POO2', 'Todos os valores devem ser preeenchidos!')
     
         self.QtStack.setCurrentIndex(0)
+        '''
         
-    def botaoBuscar(self):
+    def botaoSacar(self):
+        pass
+        '''
         cpf = self.tela_busca.lineEdit.text()
         pessoa = self.cad.busca(cpf)
         if (pessoa != None):
@@ -84,15 +95,23 @@ class Main(QMainWindow, Ui_Main):
             self.tela_busca.lineEdit_4.setText(pessoa.nascimento)
         else:
             QMessageBox.information(None, 'POO2', 'CPF não encontrado!')
-    
+        '''
+
+    def abrirTelaTransferencia(self):
+        self.QtStack.setCurrentIndex(1)
+
+    def abrirTelaSaque(self):
+        self.QtStack.setCurrentIndex(2)
+
+    def abrirTelaExtrato(self):
+        self.QtStack.setCurrentIndex(3)
+
     def botaoVoltar(self):
         self.QtStack.setCurrentIndex(0)
 
-    def abrirTelaCadastro(self):
-        self.QtStack.setCurrentIndex(1)
+    def botaoSair(self):
+        sys.exit()
 
-    def abrirTelaBusca(self):
-        self.QtStack.setCurrentIndex(2)
 
 def main():
     app = QApplication(sys.argv)

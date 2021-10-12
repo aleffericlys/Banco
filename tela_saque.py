@@ -39,10 +39,6 @@ class Tela_Saque(object):
         font1 = QFont()
         font1.setPointSize(14)
         self.pushButton.setFont(font1)
-        self.pushButton_2 = QPushButton(self.centralwidget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setGeometry(QRect(260, 320, 131, 31))
-        self.pushButton_2.setFont(font1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -62,7 +58,6 @@ class Tela_Saque(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"Saque", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Valor", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Sacar", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Voltar", None))
     # retranslateUi
 
 def main():
