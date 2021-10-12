@@ -52,7 +52,8 @@ class Main(QMainWindow, Ui_Main):
 
         self.tela_transferencia.pushButton.clicked.connect(self.botaoTransferir)
         self.tela_saque.pushButton.clicked.connect(self.botaoSacar)
-        self.tela_extrato.pushButton_2.clicked.connect(self.botaoVoltar)
+        self.tela_extrato.pushButton.clicked.connect(self.botaoVoltar)
+        self.tela_operacoes.pushButton_5.clicked.connect(self.botaoSair)
 
     def botaoCadastrar(self):
         nome = self.tela_cadastro.lineEdit.text()
