@@ -43,6 +43,18 @@ class Ui_Main(QtWidgets.QWidget):
         self.tela_extrato = Tela_Extrato()
         self.tela_extrato.setupUi(self.stack3)
 
+        self.tela_cadastro_conta = Tela_Cadastro_Conta()
+        self.tela_cadastro_conta.setupUi(self.stack4)
+
+        self.tela_cadastro_pessoa = Tela_Cadastro_Pessoa()
+        self.tela_cadastro_pessoa.setupUi(self.stack5)
+
+        self.tela_incial = TelaInicial()
+        self.tela_incial.setupUi(self.stack6)
+
+        self.tela_login = TelaLogin()
+        self.tela_login.setupUi(self.stack7)
+
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
         self.QtStack.addWidget(self.stack2)
