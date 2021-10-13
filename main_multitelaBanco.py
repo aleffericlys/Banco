@@ -10,7 +10,7 @@ from banco import Cadastro
 from tela_operacoes import Tela_Operacoes
 from tela_saque import Tela_Saque
 from tela_transferencia import Tela_Transferencia
-from tela_extrato import Tela_Extrato
+from tela_extrato import TelaExtrato
 from tela_cadastro_conta import TelaCadConta
 from tela_cadastro_pessoa import TelaCadPessoa
 from tela_incial import TelaInicial
@@ -43,7 +43,7 @@ class Ui_Main(QtWidgets.QWidget):
 		self.tela_saque = Tela_Saque()
 		self.tela_saque.setupUi(self.stack2)
 
-		self.tela_extrato = Tela_Extrato()
+		self.tela_extrato = TelaExtrato()
 		self.tela_extrato.setupUi(self.stack3)
 
 		self.tela_inicial = TelaInicial()
@@ -104,7 +104,7 @@ class Main(QMainWindow, Ui_Main):
 		self.tela_extrato.pushButton.clicked.connect(self.botaoVoltar)
 
 		self.tela_deposito.pushButton.clicked.connect(self.botaoDepositar)
-		self.tela_deposito.pushButton.clicked.connect(self.botaoSair)
+		self.tela_deposito.pushButton_2.clicked.connect(self.botaoSair)
 
 	def botaoLogin(self):
 		cpf = self.tela_login.lineEdit.text()
@@ -137,7 +137,7 @@ class Main(QMainWindow, Ui_Main):
 	def botaoCadastrar(self):
 		conta = self.tela_cadastro_conta.lineEdit.text()
 		senha = self.tela_cadastro_conta.lineEdit_2.text()
-		limite = self.tela_cadastro_conta.lineEdit_3.text()
+		limite = float(self.tela_cadastro_conta.lineEdit_3.text())
 		if self.banco.buscaC(conta) != None:
 			QMessageBox.information(None, 'Conta', 'Numero de conta indisponível')
 			self.tela_cadastro_conta.lineEdit.setText('')
@@ -163,27 +163,24 @@ class Main(QMainWindow, Ui_Main):
 
 	def botaoDepositar(self):
 		conta = self.tela_deposito.lineEdit.text()
-		valor = self.tela_deposito.lineEdit_2.text()
-		if not(conta == '' or valor == ''):
+		valor = float(self.tela_deposito.lineEdit_2.text())
+		if not(conta == '' or valor == 0):
 			conta_destino = self.banco.buscaC(conta)
 			if conta_destino != None:
 				if conta_destino.deposita(valor):
 					QMessageBox.information(None, 'Deposito', 'Deposito realizado com sucesso')
 					self.tela_deposito.lineEdit.setText('')
 					self.tela_deposito.lineEdit_2.setText('')
-					self.QtStack.setCurrentIndex(4)
+					self.QtStack.setCurrentIndex(0)
 				else:
-				 	QMessageBox.information(None, 'Deposito', 'Deposito não pode ser realizada')
-			# if (self.operacao.(c)):
-			# else:
-			# 	QMessageBox.information(None, 'POO2', 'O CPF informado já está cadastrado na base de dados!')
+				 	QMessageBox.information(None, 'Deposito', 'limite insuficiente')
 		else:
 			QMessageBox.information(None, 'Deposito', 'Preencha todos os campos')
 
 	def botaoTransferir(self):
 		
 		conta = self.tela_transferencia.lineEdit.text()
-		valor = self.tela_transferencia.lineEdit_2.text()
+		valor = float(self.tela_transferencia.lineEdit_2.text())
 		if not(conta == '' or valor == ''):
 			conta_destino = self.banco.buscaC(conta)
 			if conta_destino != None:
@@ -194,25 +191,19 @@ class Main(QMainWindow, Ui_Main):
 					self.QtStack.setCurrentIndex(4)
 				else:
 				 	QMessageBox.information(None, 'Transferência', 'Transferência não pode ser realizada')
-			# if (self.operacao.(c)):
-			# else:
-			# 	QMessageBox.information(None, 'POO2', 'O CPF informado já está cadastrado na base de dados!')
 		else:
 			QMessageBox.information(None, 'Transferencia', 'Preencha todos os campos')
 		
 		
 	def botaoSacar(self):
-		pass
-		'''
-		cpf = self.tela_busca.lineEdit.text()
-		pessoa = self.cad.busca(cpf)
-		if (pessoa != None):
-			self.tela_busca.lineEdit_2.setText(pessoa.nome)
-			self.tela_busca.lineEdit_3.setText(pessoa.endereco)
-			self.tela_busca.lineEdit_4.setText(pessoa.nascimento)
+		valor = float(self.tela_saque.lineEdit.text())
+		if self._logado.sacar(valor):
+			QMessageBox.information(None, 'Saque', 'Saque realizado com sucesso')
+			self.tela_transferencia.lineEdit.setText('')
+			self.QtStack.setCurrentIndex(4)
 		else:
-			QMessageBox.information(None, 'POO2', 'CPF não encontrado!')
-		'''
+			QMessageBox.information(None, 'Saque', 'Saldo insuficiente')
+			self.tela_transferencia.lineEdit.setText('')
 
 	def abrirTelaTransferencia(self):
 		self.QtStack.setCurrentIndex(1)
@@ -221,6 +212,17 @@ class Main(QMainWindow, Ui_Main):
 		self.QtStack.setCurrentIndex(2)
 
 	def abrirTelaExtrato(self):
+		historico = self._logado.extratos()
+		self.tela_extrato.listWidget.clear()
+		self.tela_extrato.listWidget.addItem("Cliente: {}".format(self._logado.titular.nome))
+		self.tela_extrato.listWidget.addItem("CPF: {}".format(self._logado.titular.cpf))
+		self.tela_extrato.listWidget.addItem("Numero da conta: {}".format(self._logado.numero))
+		self.tela_extrato.listWidget.addItem("Saldo: {}".format(self._logado.saldo))
+		self.tela_extrato.listWidget.addItem("Limte: {}".format(self._logado.limite))
+		self.tela_extrato.listWidget.addItem("data de abertura: {}".format(historico[0]))
+		self.tela_extrato.listWidget.addItem("Tranzações:")
+		for i in historico[1:]:
+			self.tela_extrato.listWidget.addItem("\t{}".format(i))
 		self.QtStack.setCurrentIndex(3)
 
 	def botaoVoltar(self):

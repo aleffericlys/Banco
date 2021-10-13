@@ -4,7 +4,7 @@ from cliente import Cliente
 class Conta:
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico' ]
-	def __init__(self, numero, titular : Cliente, senha, saldo = 0, limite = 1000):
+	def __init__(self, numero, titular : Cliente, senha, saldo: float = 0, limite: float = 1000):
 		self._numero = numero
 		self._titular = titular
 		self._senha = senha
@@ -79,9 +79,9 @@ class Conta:
 		
 	
 	def extratos(self):
-		self._titular.imprimir()
-		print("Conta: {}\nsaldo: {} \nlimite: {}".format(self._numero, self._saldo, self._limite))
-		self._historico.imprimir()
+		# self._titular.imprimir()
+		# print("Conta: {}\nsaldo: {} \nlimite: {}".format(self._numero, self._saldo, self._limite))
+		return self._historico.historico
 
 	def transferir(self, destino, valor):
 		if self.saldo >= valor and destino.limite >= valor+destino.saldo:
@@ -96,6 +96,11 @@ class Historico:
 	def __init__(self):
 		self.dataDeAbertura = datetime.datetime.today()
 		self.transacoes = []
+		self.transacoes.append(self.dataDeAbertura)
+
+	@property
+	def historico(self):
+		return self.transacoes
 	
 	def imprimir(self):
 		print("data de abertura: {}".format(self.dataDeAbertura))

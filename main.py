@@ -9,7 +9,7 @@ c.sacar(100)
 b.transferir(c, 200)
 # print(c.saldo)
 # print(b.saldo)
-c.extratos()
-b.extratos()
+a = c.extratos()
+print (a[0])
 
 #Alteração#
