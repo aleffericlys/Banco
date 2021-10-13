@@ -1,4 +1,5 @@
 from conta import Conta
+from cliente import Cliente
 
 class Cadastro:
 	__slots__ = ['_lista_contas']
@@ -14,7 +15,14 @@ class Cadastro:
 			return False
 
 
-	def busca(self, numero):
+	def busca(self, cpf):
+		for conta in self._lista_contas:
+			if cpf == conta.titular.cpf:
+				return conta
+		
+		return None
+	
+	def buscaC(self, numero):
 		for conta in self._lista_contas:
 			if numero == conta.numero:
 				return conta
@@ -28,9 +36,9 @@ class Cadastro:
 			
 		return False
 
-	def senha(self, senha):
+	def senha(self, senha: str):
 		for conta in self._lista_contas:
 			if senha == conta.senha:
-				return conta
+				return True
 			
 		return False

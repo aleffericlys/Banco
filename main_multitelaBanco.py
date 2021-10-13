@@ -67,6 +67,8 @@ class Ui_Main(QtWidgets.QWidget):
 		self.QtStack.addWidget(self.stack7)
 
 class Main(QMainWindow, Ui_Main):
+	_logado: Conta
+	_pessoa: Cliente
 	def __init__(self, parent = None):
 		super(Main, self).__init__(parent)
 		self.setupUi(self)
@@ -96,45 +98,81 @@ class Main(QMainWindow, Ui_Main):
 		
 		self.tela_extrato.pushButton.clicked.connect(self.botaoVoltar)
 
+	def botaoLogin(self):
+		cpf = self.tela_login.lineEdit.text()
+		senha = self.tela_login.lineEdit_2.text()
+		if not(cpf == '' or senha == ''):
+			if not(self.banco.login(cpf)) and not(self.banco.senha(senha)):
+				QMessageBox.information(None, 'Login', 'CPF e Senha incorretos')
+			elif not self.banco.login(cpf):
+				QMessageBox.information(None, 'Login', 'CPF incorreto')
+			elif not self.banco.senha(senha):
+				QMessageBox.information(None, 'Login', 'Senha incorreta')
+			else:
+				self.tela_login.lineEdit.setText('')
+				self.tela_login.lineEdit_2.setText('')
+				self._logado = self.banco.busca(cpf)
+				self.QtStack.setCurrentIndex(4)
+			
+		else:
+			QMessageBox.warning(None, 'Login', 'Todos os campos devem ser preenchidos')
 
 	def botaoAcessarConta(self):
 		self.QtStack.setCurrentIndex(5)
-	
-	def botaoLogin(self):
-		self.QtStack.setCurrentIndex(4)
 
 	def botaoCriarConta(self):
 		self.QtStack.setCurrentIndex(6)
+	
+	def botaoCadastrar(self):
+		conta = self.tela_cadastro_conta.lineEdit.text()
+		senha = self.tela_cadastro_conta.lineEdit_2.text()
+		limite = self.tela_cadastro_conta.lineEdit_3.text()
+		if self.banco.buscaC(conta) != None:
+			QMessageBox.information(None, 'Conta', 'Numero de conta indisponível')
+			self.tela_cadastro_conta.lineEdit.setText('')
+		else:
+			self.banco.cadastra(Conta(conta, self._pessoa, senha, limite= limite))
+			QMessageBox.information(None, 'Conta', 'Conta cadastrada com sucesso')
+			self.QtStack.setCurrentIndex(0)
 
 	def botaoProximo(self):
-		self.QtStack.setCurrentIndex(7)
+		nome = self.tela_cadastro_pessoa.lineEdit.text()
+		cpf = self.tela_cadastro_pessoa.lineEdit_2.text()
+		endereco = self.tela_cadastro_pessoa.lineEdit_3.text()
+		nascimento = self.tela_cadastro_pessoa.lineEdit_4.text()
+		if self.banco.busca(cpf):
+			QMessageBox.information(None, 'Cadastro', 'Pessoa já cadastrada')
+		else:
+			self.tela_cadastro_pessoa.lineEdit.setText('')
+			self.tela_cadastro_pessoa.lineEdit_2.setText('')
+			self.tela_cadastro_pessoa.lineEdit_3.setText('')
+			self.tela_cadastro_pessoa.lineEdit_4.setText('')
+			self._pessoa = Cliente(nome, cpf, endereco, nascimento)
+			self.QtStack.setCurrentIndex(7)
 
 	def botaoDepositar(self):
 		pass
 
-	def botaoCadastrar(self):
-		pass
-
 	def botaoTransferir(self):
-		pass
-		'''
-		conta_destino = self.tela_transferencia.lineEdit.text()
+		
+		conta = self.tela_transferencia.lineEdit.text()
 		valor = self.tela_transferencia.lineEdit_2.text()
-		if not(conta_destino == '' or valor == ''):
-			c = Conta.transferir(conta_destino, valor)
-			if (self.operacao.(c)):
-				QMessageBox.information(None, 'POO2', 'Cadastro realizado com sucesso!')
-				self.tela_cadastro.lineEdit.setText('')
-				self.tela_cadastro.lineEdit_2.setText('')
-				self.tela_cadastro.lineEdit_3.setText('')
-				self.tela_cadastro.lineEdit_4.setText('')
-			else:
-				QMessageBox.information(None, 'POO2', 'O CPF informado já está cadastrado na base de dados!')
+		if not(conta == '' or valor == ''):
+			conta_destino = self.banco.buscaC(conta)
+			if conta_destino != None:
+				if self._logado.transferir(conta_destino, valor):
+					QMessageBox.information(None, 'Transferencia', 'Transferencia realizada com sucesso')
+					self.tela_transferencia.lineEdit.setText('')
+					self.tela_transferencia.lineEdit_2.setText('')
+					self.QtStack.setCurrentIndex(4)
+				else:
+				 	QMessageBox.information(None, 'Transferencia', 'Transferência não pode ser realizada')
+			# if (self.operacao.(c)):
+			# else:
+			# 	QMessageBox.information(None, 'POO2', 'O CPF informado já está cadastrado na base de dados!')
 		else:
-			QMessageBox.information(None, 'POO2', 'Todos os valores devem ser preeenchidos!')
-	
-		self.QtStack.setCurrentIndex(0)
-		'''
+			QMessageBox.information(None, 'Transferencia', 'Preencha todos os campos')
+		
 		
 	def botaoSacar(self):
 		pass
