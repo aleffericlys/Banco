@@ -163,11 +163,11 @@ class Main(QMainWindow, Ui_Main):
 
 	def botaoDepositar(self):
 		conta = self.tela_deposito.lineEdit.text()
-		valor = float(self.tela_deposito.lineEdit_2.text())
-		if not(conta == '' or valor == 0):
+		valor = self.tela_deposito.lineEdit_2.text()
+		if not(conta == '' or valor == ''):
 			conta_destino = self.banco.buscaC(conta)
 			if conta_destino != None:
-				if conta_destino.deposita(valor):
+				if conta_destino.deposita(float(valor)):
 					QMessageBox.information(None, 'Deposito', 'Deposito realizado com sucesso')
 					self.tela_deposito.lineEdit.setText('')
 					self.tela_deposito.lineEdit_2.setText('')
@@ -220,7 +220,7 @@ class Main(QMainWindow, Ui_Main):
 		self.tela_extrato.listWidget.addItem("Saldo: {}".format(self._logado.saldo))
 		self.tela_extrato.listWidget.addItem("Limte: {}".format(self._logado.limite))
 		self.tela_extrato.listWidget.addItem("data de abertura: {}".format(historico[0]))
-		self.tela_extrato.listWidget.addItem("Tranzações:")
+		self.tela_extrato.listWidget.addItem("Transações:")
 		for i in historico[1:]:
 			self.tela_extrato.listWidget.addItem("\t{}".format(i))
 		self.QtStack.setCurrentIndex(3)
