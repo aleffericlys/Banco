@@ -8,12 +8,12 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 
-class Tela_Operacoes(object):
+class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -34,19 +34,15 @@ class Tela_Operacoes(object):
         self.pushButton.setFont(font1)
         self.pushButton_2 = QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setGeometry(QRect(250, 190, 131, 31))
+        self.pushButton_2.setGeometry(QRect(250, 200, 131, 31))
         self.pushButton_2.setFont(font1)
-        self.pushButton_4 = QPushButton(self.centralwidget)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-        self.pushButton_4.setGeometry(QRect(250, 330, 131, 31))
-        self.pushButton_4.setFont(font1)
         self.pushButton_3 = QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName(u"pushButton_3")
-        self.pushButton_3.setGeometry(QRect(250, 260, 131, 31))
+        self.pushButton_3.setGeometry(QRect(250, 280, 131, 31))
         self.pushButton_3.setFont(font1)
         self.pushButton_5 = QPushButton(self.centralwidget)
         self.pushButton_5.setObjectName(u"pushButton_5")
-        self.pushButton_5.setGeometry(QRect(250, 400, 131, 31))
+        self.pushButton_5.setGeometry(QRect(250, 360, 131, 31))
         self.pushButton_5.setFont(font1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -67,19 +63,7 @@ class Tela_Operacoes(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"Opera\u00e7\u00f5es", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Transfer\u00eancia", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Saque", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Hist\u00f3rico", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Extrato", None))
-        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Sair da Conta", None))
+        self.pushButton_5.setText(QCoreApplication.translate("MainWindow", u"Sair", None))
     # retranslateUi
 
-def main():
-    import sys
-    app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = Tela_Operacoes()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
-
-if __name__ == "__main__":
-    main()

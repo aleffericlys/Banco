@@ -8,12 +8,12 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 
-class Tela_Saque(object):
+class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
@@ -39,6 +39,10 @@ class Tela_Saque(object):
         font1 = QFont()
         font1.setPointSize(14)
         self.pushButton.setFont(font1)
+        self.pushButton_2 = QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setGeometry(QRect(260, 320, 131, 31))
+        self.pushButton_2.setFont(font1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -58,16 +62,6 @@ class Tela_Saque(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"Saque", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Valor", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Sacar", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Voltar", None))
     # retranslateUi
 
-def main():
-    import sys
-    app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = Tela_Saque()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
-
-if __name__ == "__main__":
-    main()
