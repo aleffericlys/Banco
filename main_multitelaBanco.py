@@ -7,9 +7,9 @@ from PyQt5.QtCore import QCoreApplication
 from cliente import Cliente
 from conta import Conta, Historico
 from banco import Cadastro
-from tela_operacoes import Tela_Operacoes
-from tela_saque import Tela_Saque
-from tela_transferencia import Tela_Transferencia
+from tela_operacoes import TelaOperacoes
+from tela_saque import TelaSaque
+from tela_transferencia import TelaTransferencia
 from tela_extrato import TelaExtrato
 from tela_cadastro_conta import TelaCadConta
 from tela_cadastro_pessoa import TelaCadPessoa
@@ -34,13 +34,13 @@ class Ui_Main(QtWidgets.QWidget):
 		self.stack7 = QtWidgets.QMainWindow()
 		self.stack8 = QtWidgets.QMainWindow()
 
-		self.tela_operacoes = Tela_Operacoes()
+		self.tela_operacoes = TelaOperacoes()
 		self.tela_operacoes.setupUi(self.stack4)
 
-		self.tela_transferencia = Tela_Transferencia()
+		self.tela_transferencia = TelaTransferencia()
 		self.tela_transferencia.setupUi(self.stack1)
 
-		self.tela_saque = Tela_Saque()
+		self.tela_saque = TelaSaque()
 		self.tela_saque.setupUi(self.stack2)
 
 		self.tela_extrato = TelaExtrato()
@@ -86,20 +86,24 @@ class Main(QMainWindow, Ui_Main):
 		self.tela_inicial.pushButton_4.clicked.connect(sys.exit)
 
 		self.tela_login.pushButton.clicked.connect(self.botaoLogin)
+		self.tela_login.pushButton_2.clicked.connect(self.botaoSair)
 
 		self.tela_cadastro_pessoa.pushButton.clicked.connect(self.botaoProximo)
+		self.tela_cadastro_pessoa.pushButton_2.clicked.connect(self.botaoSair)
 
 		self.tela_cadastro_conta.pushButton.clicked.connect(self.botaoCadastrar)
+		self.tela_cadastro_conta.pushButton_2.clicked.connect(self.botaoSair)
 	
 		self.tela_operacoes.pushButton.clicked.connect(self.abrirTelaTransferencia)
 		self.tela_operacoes.pushButton_2.clicked.connect(self.abrirTelaSaque)
 		self.tela_operacoes.pushButton_3.clicked.connect(self.abrirTelaExtrato)
-		self.tela_operacoes.pushButton_5.clicked.connect(self.abrirTelaSaque)
-		self.tela_operacoes.pushButton_5.clicked.connect(self.botaoSair)
+		self.tela_operacoes.pushButton_4.clicked.connect(self.botaoSair)
 
 		self.tela_transferencia.pushButton.clicked.connect(self.botaoTransferir)
+		self.tela_transferencia.pushButton_2.clicked.connect(self.botaoVoltar)
 
 		self.tela_saque.pushButton.clicked.connect(self.botaoSacar)
+		self.tela_saque.pushButton_2.clicked.connect(self.botaoVoltar)
 		
 		self.tela_extrato.pushButton.clicked.connect(self.botaoVoltar)
 
