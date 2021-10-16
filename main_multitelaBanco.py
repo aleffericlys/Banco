@@ -148,6 +148,9 @@ class Main(QMainWindow, Ui_Main):
 		else:
 			self.banco.cadastra(Conta(conta, self._pessoa, senha, limite= limite))
 			QMessageBox.information(None, 'Conta', 'Conta cadastrada com sucesso')
+			self.tela_cadastro_conta.lineEdit.setText('')
+			self.tela_cadastro_conta.lineEdit_2.setText('')
+			self.tela_cadastro_conta.lineEdit_3.setText('')
 			self.QtStack.setCurrentIndex(0)
 
 	def botaoProximo(self):
