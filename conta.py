@@ -7,26 +7,28 @@ class Conta:
 	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
 	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
-	linha = cursor.fetchone()
+	linha = cursor.fetchall()
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS contas(
-			numero integer AUTO_INCREMENT PRIMARY KEY,
-			titular text NOT NULL,
+			numero VARCHAR(11) UNIQUE PRIMARY KEY,
+			titular VARCHAR(11) NOT NULL,
 			saldo float NOT NULL,
 			senha VARCHAR(32) NOT NULL,
-			limite float NOT
+			limite float NOT NULL
 		);
 		""")
 
 	_numeroContas = 0
-	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico' ]
-	def __init__(self, numero, titular : Cliente, senha, saldo: float = 0, limite: float = 1000):
+	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico']
+	def __init__(self, numero, titular, saldo, senha, limite = 1000.00):
 		Conta.cursor.execute(
         """
 		INSERT INTO contas 
-		(titular, saldo, senha, limite) VALUES 
-		(%s, %f, MD5(%s), %f)
-		""", (titular, saldo, senha, limite))
+		(numero, titular, saldo, senha, limite) 
+		VALUES 
+		(%s, %s, %f, md5(%s), %f)
+		""", (numero, titular, saldo, senha, limite))
+		Conta.conexao.commit()
 
 		self._numero = numero
 		self._titular = titular
@@ -80,7 +82,7 @@ class Conta:
 			else:
 				self._historico.transacoes.append("Transferencia de {} reais de {} recebida em: {}".format(valor, pessoa.nome, datetime.datetime.now()))
 				self._saldo += valor
-				Conta.cursor.execute("UPDATE contas SET saldo = (%f) LIMIT 1", (self._saldo))
+				Conta.cursor.execute("UPDATE contas SET saldo = (%f)", (self._saldo))
 			return True
 	
 
@@ -93,7 +95,7 @@ class Conta:
 			else:
 				self._historico.transacoes.append("Saque de {} reais realizado con sucesso em: {}".format(valor, datetime.datetime.now()))
 				self._saldo -= valor
-				Conta.cursor.execute("UPDATE contas SET saldo = (%f) LIMIT 1", (self._saldo))
+				Conta.cursor.execute("UPDATE contas SET saldo = (%f)", (self._saldo))
 			return True
 	
 	def extratos(self):
@@ -115,7 +117,7 @@ class Historico:
 		self.dataDeAbertura = datetime.datetime.today()
 		self.transacoes = []
 		self.transacoes.append(self.dataDeAbertura)
-
+    
 	@property
 	def historico(self):
 		return self.transacoes

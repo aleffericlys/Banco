@@ -5,7 +5,7 @@ class Cliente:
 	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
 	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
-	linha = cursor.fetchone()
+	linhas = cursor.fetchall()
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS clientes(
 			nome VARCHAR(50) NOT NULL,
@@ -20,9 +20,12 @@ class Cliente:
 		Cliente.cursor.execute(
         """
 		INSERT INTO clientes 
-		(nome, cpf, endereco, nascimento) VALUES 
-		(%s %s, %s, %s)
+		(nome, cpf, endereco, nascimento) 
+		VALUES 
+		(%s, %s, %s, %s)
 		""", (nome, cpf, endereco, nascimento))
+		Cliente.conexao.commit()
+		
 		self._nome = nome
 		self._cpf = cpf
 		self._endereco = endereco
@@ -31,6 +34,8 @@ class Cliente:
 	@property
 	def nome(self):
 		Cliente.cursor.execute("SELECT nome FROM clientes", (self._nome))
+		for linha in Cliente.linhas:
+			return linha[0]
 		return self._nome
 	
 	@nome.setter
@@ -51,7 +56,8 @@ class Cliente:
 	@property
 	def cpf(self):
 		Cliente.cursor.execute("SELECT cpf FROM clientes", (self._cpf))
-		return self._cpf
+		for linha in Cliente.linhas:
+			return linha[1]
 	
 	@cpf.setter
 	def cpf(self, cpf):
