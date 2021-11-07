@@ -1,7 +1,13 @@
 from conta import Conta
 from cliente import Cliente
+import mysql.connector as mysql
 
 class Cadastro:
+
+	conexao = mysql.connect(host = "Banco", db = "banco", user = "root", password = "7650FNAF")
+	cursor = conexao.cursor()
+	cursor.execute("SELECT DATABASE();")
+
 	__slots__ = ['_lista_contas']
 	def __init__(self):
 		self._lista_contas = []

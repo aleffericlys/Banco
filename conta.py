@@ -1,10 +1,32 @@
 import datetime
 from cliente import Cliente
+import mysql.connector as mysql
 
 class Conta:
+
+	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
+	cursor = conexao.cursor()
+	cursor.execute("SELECT DATABASE();")
+	cursor.execute("""
+		CREATE TABLE IF NOT EXISTS contas(
+			numero integer AUTO_INCREMENT PRIMARY KEY,
+			titular text NOT NULL,
+			saldo float NOT NULL,
+			senha VARCHAR(32) NOT NULL,
+			limite float NOT
+		)DEFAULT CHARSET = utf8;
+		""")
+
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico' ]
 	def __init__(self, numero, titular : Cliente, senha, saldo: float = 0, limite: float = 1000):
+		Conta.cursor.execute(
+        """
+		INSERT INTO contas 
+		(titular, saldo, senha, limite) VALUES 
+		(%s, %f, MD5(%s), %f)
+		""", (titular, saldo, senha, limite))
+
 		self._numero = numero
 		self._titular = titular
 		self._senha = senha
@@ -20,39 +42,33 @@ class Conta:
 
 	@property
 	def numero(self):
+		Conta.cursor.execute("SELECT numero FROM contas", (self._numero))
 		return self._numero
-	
-	@numero.setter
-	def numero(self, numero):
-		self._numero = numero
 
 	@property
 	def saldo(self):
+		Conta.cursor.execute("SELECT saldo FROM contas", (self._saldo))
 		return self._saldo
-	
-	@property
-	def senha(self):
-		return self._senha
-	
-	@saldo.setter
-	def saldo(self, saldo):
-		self._saldo = saldo
 
 	@property
 	def titular(self):
+		Conta.cursor.execute("SELECT titular FROM contas", (self._titular))
 		return self._titular
 	
 	@titular.setter
 	def titular(self, titular):
 		self._titular = titular
+		Conta.cursor.execute("UPDATE contas SET titular = (%s)", (self._titular))
 
 	@property
 	def limite(self):
+		Conta.cursor.execute("SELECT limite FROM contas", (self._limite))
 		return self._limite
 	
 	@limite.setter
 	def limite(self, limite):
 		self._limite = limite
+		Conta.cursor.execute("UPDATE contas SET limite = (%f)", (self._limite))
 	
 	def deposita(self, valor, op = 0, pessoa : Cliente = None):
 		if self._saldo+valor > self._limite:
@@ -62,7 +78,8 @@ class Conta:
 				self._historico.transacoes.append("Deposito de {} reais realizado em: {}".format(valor, datetime.datetime.now()))
 			else:
 				self._historico.transacoes.append("Transferencia de {} reais de {} recebida em: {}".format(valor, pessoa.nome, datetime.datetime.now()))
-			self._saldo += valor
+				self._saldo += valor
+				Conta.cursor.execute("UPDATE contas SET saldo = (%f) LIMIT 1", (self._saldo))
 			return True
 	
 
@@ -74,9 +91,9 @@ class Conta:
 				self._historico.transacoes.append("transferencia de {} reais para {} realizado con sucesso em: {}".format(valor, pessoa.nome, datetime.datetime.now()))
 			else:
 				self._historico.transacoes.append("Saque de {} reais realizado con sucesso em: {}".format(valor, datetime.datetime.now()))
-			self._saldo -= valor
+				self._saldo -= valor
+				Conta.cursor.execute("UPDATE contas SET saldo = (%f) LIMIT 1", (self._saldo))
 			return True
-		
 	
 	def extratos(self):
 		# self._titular.imprimir()
