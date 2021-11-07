@@ -3,15 +3,16 @@ import mysql.connector as mysql
 class Cliente:
 
 	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
-	cursor = conexao.cursor()
+	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
+	linha = cursor.fetchone()
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS clientes(
 			nome VARCHAR(50) NOT NULL,
 			cpf VARCHAR(11) NOT NULL PRIMARY KEY,
 			endereco VARCHAR(120) NOT NULL,
 			nascimento DATE
-		)DEFAULT CHARSET = utf8;
+		);
 		""")
 
 	__slots__ = ['_nome', '_cpf', '_endereco', '_nascimento']

@@ -2,8 +2,8 @@ from conta import Conta
 from cliente import Cliente
 import mysql.connector as mysql
  
-p1 = Cliente('aleff', '123455', 'no local lá', '11223333')
-p2 = Cliente('Ffela', '554321', 'no outro local lá', '33221111')
+p1 = Cliente('aleff', '123455', 'no local la', '11223333')
+p2 = Cliente('Ffela', '554321', 'no outro local la', '33221111')
 c = Conta(p1, '123', 500, 1000 )
 b = Conta(p2, '321', 500, 1000 )
 c.sacar(100)

@@ -5,8 +5,9 @@ import mysql.connector as mysql
 class Conta:
 
 	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
-	cursor = conexao.cursor()
+	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
+	linha = cursor.fetchone()
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS contas(
 			numero integer AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +15,7 @@ class Conta:
 			saldo float NOT NULL,
 			senha VARCHAR(32) NOT NULL,
 			limite float NOT
-		)DEFAULT CHARSET = utf8;
+		);
 		""")
 
 	_numeroContas = 0
