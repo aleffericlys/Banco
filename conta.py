@@ -20,12 +20,12 @@ class Conta:
 
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico']
-	def __init__(self, numero, titular, saldo, senha, limite = 1000.00):
+	def __init__(self, numero, titular, saldo, senha, limite):
 		Conta.cursor.execute(
         """
-		INSERT INTO contas 
-		(numero, titular, saldo, senha, limite) 
-		VALUES 
+		INSERT INTO contas
+		(numero, titular, saldo, senha, limite)
+		VALUES
 		(%s, %s, %f, md5(%s), %f)
 		""", (numero, titular, saldo, senha, limite))
 		Conta.conexao.commit()
@@ -37,7 +37,6 @@ class Conta:
 		self._limite = limite
 		self._historico = Historico()
 		Conta._numeroContas += 1
-
 
 	@staticmethod
 	def get_total_contas():

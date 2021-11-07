@@ -21,7 +21,7 @@ class Cliente:
         """
 		INSERT INTO clientes 
 		(nome, cpf, endereco, nascimento) 
-		VALUES 
+		VALUES
 		(%s, %s, %s, %s)
 		""", (nome, cpf, endereco, nascimento))
 		Cliente.conexao.commit()
