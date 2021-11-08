@@ -2,7 +2,7 @@ import mysql.connector as mysql
 
 class Cliente:
 
-	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
+	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF", auth_plugin = 'mysql_native_password')
 	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
 	linhas = cursor.fetchall()

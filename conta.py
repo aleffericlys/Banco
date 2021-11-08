@@ -4,13 +4,13 @@ import mysql.connector as mysql
 
 class Conta:
 
-	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF")
+	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF",  auth_plugin = 'mysql_native_password')
 	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
 	linha = cursor.fetchall()
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS contas(
-			numero VARCHAR(11) UNIQUE PRIMARY KEY,
+			numero integer AUTO_INCREMENT UNIQUE PRIMARY KEY,
 			titular VARCHAR(11) NOT NULL,
 			saldo float NOT NULL,
 			senha VARCHAR(32) NOT NULL,
@@ -20,17 +20,16 @@ class Conta:
 
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico']
-	def __init__(self, numero, titular, saldo, senha, limite):
+	def __init__(self, titular, saldo, senha, limite):
 		Conta.cursor.execute(
         """
 		INSERT INTO contas
-		(numero, titular, saldo, senha, limite)
+		(titular, saldo, senha, limite)
 		VALUES
-		(%s, %s, %f, md5(%s), %f)
-		""", (numero, titular, saldo, senha, limite))
+		(%s, %s, md5(%s), %s)
+		""", (titular, str(saldo), senha, str(limite)))
 		Conta.conexao.commit()
 
-		self._numero = numero
 		self._titular = titular
 		self._senha = senha
 		self._saldo = saldo
