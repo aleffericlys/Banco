@@ -4,13 +4,12 @@ class Cliente:
 
 	conexao = mysql.connect(
 		host = "localhost", 
-		db = "banco", 
 		user = "root",
 		password = "7650FNAF", 
 		auth_plugin = 'mysql_native_password')
 
 	cursor = conexao.cursor(buffered = True)
-	cursor.execute("SELECT DATABASE();")
+	cursor.execute("USE banco;")
 	cursor.execute("""
 			CREATE TABLE IF NOT EXISTS clientes(
 				nome VARCHAR(50) NOT NULL,
@@ -37,9 +36,9 @@ class Cliente:
 		self._nascimento = nascimento
 
 	@property
-	def nome(Nome):
-		Cliente.cursor.execute("SELECT nome FROM clientes WHERE nome = (%s)", (Nome))
-		linhas = Cliente.cursor.fetchone()
+	def nome(nome):
+		Cliente.cursor.execute("SELECT nome FROM clientes WHERE nome = (%s)", (nome))
+		linhas = Cliente.cursor.fetchall()
 		for linha in linhas:
 			return linha
 

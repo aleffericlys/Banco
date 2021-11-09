@@ -4,10 +4,14 @@ import mysql.connector as mysql
 
 class Conta:
 
-	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF", auth_plugin = 'mysql_native_password')
+	conexao = mysql.connect(
+		host = "localhost",
+		user = "root", 
+		password = "7650FNAF", 
+		auth_plugin = 'mysql_native_password')
+
 	cursor = conexao.cursor(buffered = True)
-	cursor.execute("SELECT DATABASE();")
-	linhas = cursor.fetchall()
+	cursor.execute("USE banco;")
 	cursor.execute("""
 		CREATE TABLE IF NOT EXISTS contas(
 			numero integer AUTO_INCREMENT UNIQUE PRIMARY KEY,
