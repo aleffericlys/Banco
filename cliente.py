@@ -2,17 +2,22 @@ import mysql.connector as mysql
 
 class Cliente:
 
-	conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "7650FNAF", auth_plugin = 'mysql_native_password')
+	conexao = mysql.connect(
+		host = "localhost", 
+		db = "banco", 
+		user = "root",
+		password = "7650FNAF", 
+		auth_plugin = 'mysql_native_password')
+
 	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
-	linhas = cursor.fetchall()
 	cursor.execute("""
-		CREATE TABLE IF NOT EXISTS clientes(
-			nome VARCHAR(50) NOT NULL,
-			cpf VARCHAR(11) NOT NULL PRIMARY KEY,
-			endereco VARCHAR(120) NOT NULL,
-			nascimento DATE
-		);
+			CREATE TABLE IF NOT EXISTS clientes(
+				nome VARCHAR(50) NOT NULL,
+				cpf VARCHAR(11) NOT NULL PRIMARY KEY,
+				endereco VARCHAR(120) NOT NULL,
+				nascimento DATE
+			);
 		""")
 
 	__slots__ = ['_nome', '_cpf', '_endereco', '_nascimento']
@@ -32,14 +37,14 @@ class Cliente:
 		self._nascimento = nascimento
 
 	@property
-	def nome(self):
-		Cliente.cursor.execute("SELECT nome FROM clientes", (self._nome))
-		for linha in Cliente.linhas:
-			return linha[0]
-		return self._nome
-	
+	def nome(Nome):
+		Cliente.cursor.execute("SELECT nome FROM clientes WHERE nome = (%s)", (Nome))
+		linhas = Cliente.cursor.fetchone()
+		for linha in linhas:
+			return linha
+
 	@nome.setter
-	def nome(self, nome):
+	def set_nome(self, nome):
 		self._nome = nome
 		Cliente.cursor.execute("UPDATE clientes SET nome = (%s)", (self._nome))
 

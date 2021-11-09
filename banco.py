@@ -4,9 +4,10 @@ import mysql.connector as mysql
 
 class Cadastro:
 
-	conexao = mysql.connect(host = "Banco", db = "banco", user = "root", password = "7650FNAF")
-	cursor = conexao.cursor()
+	conexao = mysql.connect(host = "Banco", db = "banco", user = "root", password = "7650FNAF", auth_plugin = 'mysql_native_password')
+	cursor = conexao.cursor(buffered = True)
 	cursor.execute("SELECT DATABASE();")
+	linhas = cursor.fetchall()
 
 	__slots__ = ['_lista_contas']
 	def __init__(self):
@@ -22,25 +23,15 @@ class Cadastro:
 
 
 	def busca(self, cpf):
-		for conta in self._lista_contas:
-			if cpf == conta.titular.cpf:
-				return conta
-		
-		return None
+		return Cadastro.cursor.execute("SELECT * FROM contas WHERE cpf = (%s)", cpf)
 	
 	def buscaC(self, numero):
-		for conta in self._lista_contas:
-			if numero == conta.numero:
-				return conta
-		
-		return None
+		return Cadastro.cursor.execute("SELECT * FROM contas WHERE numero = (%s)", numero)
 
 	def login(self, cpf):
 		for conta in self._lista_contas:
-			if cpf == conta.titular.cpf:
-				return True
-			
-		return False
+			if Cadastro.cursor.execute("SELECT * FROM contas WHERE cpf = (%s)", cpf):
+				return True 
 
 	def senha(self, senha: str):
 		for conta in self._lista_contas:
