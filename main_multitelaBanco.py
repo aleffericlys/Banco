@@ -1,4 +1,5 @@
 import sys
+import socket
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
@@ -14,6 +15,12 @@ from tela_cadastro_pessoa import TelaCadPessoa
 from tela_incial import TelaInicial
 from tela_login import TelaLogin
 from tela_deposito import TelaDeposito
+
+ip = "localhost"
+port = 7003
+addr = ((ip, port))
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(addr)
 
 class Ui_Main(QtWidgets.QWidget):
 	def setupUi(self, Main):
@@ -77,7 +84,7 @@ class Main(QMainWindow, Ui_Main):
 		self.tela_inicial.pushButton.clicked.connect(self.botaoAcessarConta)
 		self.tela_inicial.pushButton_2.clicked.connect(self.botaoCriarConta)
 		self.tela_inicial.pushButton_3.clicked.connect(self.botaoDeposito)
-		self.tela_inicial.pushButton_4.clicked.connect(sys.exit)
+		self.tela_inicial.pushButton_4.clicked.connect(self.desconectar)
 
 		self.tela_login.pushButton.clicked.connect(self.botaoLogin)
 		self.tela_login.pushButton_2.clicked.connect(self.botaoSair)
@@ -105,6 +112,7 @@ class Main(QMainWindow, Ui_Main):
 		cpf = self.tela_login.lineEdit.text()
 		senha = self.tela_login.lineEdit_2.text()
 		if not(cpf == '' or senha == ''):
+			msg = f"login,{cpf},{senha}"
 			if not(self.banco.login(cpf, senha)):
 				QMessageBox.information(None, 'Login', 'CPF ou Senha incorretos')
 			else:
@@ -113,7 +121,6 @@ class Main(QMainWindow, Ui_Main):
 				self._logado = self.banco.busca(cpf)
 				self._logado1 = self.banco.buscaP(cpf)
 				self.QtStack.setCurrentIndex(4)
-			
 		else:
 			QMessageBox.warning(None, 'Login', 'Todos os campos devem ser preenchidos')
 
@@ -165,7 +172,6 @@ class Main(QMainWindow, Ui_Main):
 			QMessageBox.information(None, 'Deposito', 'Preencha todos os campos')
 
 	def botaoTransferir(self):
-		
 		conta = self.tela_transferencia.lineEdit.text()
 		valor = float(self.tela_transferencia.lineEdit_2.text())
 		if not(conta == '' or valor == ''):
@@ -214,7 +220,10 @@ class Main(QMainWindow, Ui_Main):
 
 	def botaoSair(self):
 		self.QtStack.setCurrentIndex(0)
-
+		
+	def desconectar():
+		client_socket.close()
+		sys.exit()
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)

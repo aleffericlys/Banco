@@ -3,7 +3,12 @@ from cliente import Cliente
 import datetime
 import mysql.connector as mysql
 
-conexao = mysql.connect(host = "localhost", db = "banco", user = "root", password = "Ericly$2", auth_plugin = 'mysql_native_password')
+conexao = mysql.connect(
+	host = "localhost", 
+	db = "banco", 
+	user = "root", 
+	password = "7650FNAF", 
+	auth_plugin = 'mysql_native_password')
 cursor = conexao.cursor(buffered = True)
 cursor.execute("SELECT DATABASE();")
 linhas = cursor.fetchall()
@@ -84,7 +89,6 @@ def deposita(valor: float, destino: tuple, op = 0, emisor: str = None):
 			cursor.execute(command)
 			conexao.commit()
 		return True
-	
 
 def sacar(valor: float, conta: tuple, op = 0, pessoa : str = None):
 	pass

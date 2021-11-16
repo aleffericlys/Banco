@@ -8,7 +8,7 @@ class Conta:
 		host = "localhost",
 		user = "root",
 		db = "banco",
-		password = "Ericly$2", 
+		password = "7650FNAF", 
 		auth_plugin = 'mysql_native_password')
 
 	cursor = conexao.cursor(buffered = True)
