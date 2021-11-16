@@ -6,7 +6,7 @@ class Cliente:
 		host = "localhost",
 		db = "banco", 
 		user = "root",
-		password = "7650FNAF", 
+		password = "Ericly$2", 
 		auth_plugin = 'mysql_native_password')
 
 	cursor = conexao.cursor(buffered = True)

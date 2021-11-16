@@ -1,33 +1,48 @@
-import mysql.connector as mysql
+# import mysql.connector as mysql
+import socket
 
-conexao = mysql.connect(
-	host = "localhost", 
-	user = "root",
-	db = "banco", 
-	password = "Ericly$2", 
-	auth_plugin = 'mysql_native_password')
+ip = "localhost"
+port = 7020
+addr = ((ip, port))
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(addr)
 
-cursor = conexao.cursor(buffered = True)
-cursor.execute("USE banco;")
-command = "SELECT * FROM clientes WHERE cpf = '{}'".format("1111")
-cursor.execute(command)
-for i in cursor:
-	conta = i
+# client_socket.send("criar|rafael|3333|gasdfasda|1998-10-10|3333".encode())
+client_socket.send("deposito|1|20".encode())
 
-print(conta)
-cursor.execute("UPDATE clientes SET nome = %s WHERE cpf = %s", ('aleff','1111'))
-conexao.commit()
-valor = float('100')
-saldo: float = conta[2]
-limite: float = conta[4]
-dep = int(conta[0])
-print("saldo de: {}\nlimite: {}".format(saldo, limite))
-if saldo + valor > limite:
-	print("não deu")
-else:
-	command = """UPDATE contas SET saldo = """ + str(saldo + valor) + """ WHERE numeros = """+str(dep)
-	cursor.execute(command)
-	conexao.commit()
+print(client_socket.recv(1024).decode())
+
+client_socket.send("bye".encode())
+client_socket.close()
+
+# conexao = mysql.connect(
+# 	host = "localhost", 
+# 	user = "root",
+# 	db = "banco", 
+# 	password = "Ericly$2", 
+# 	auth_plugin = 'mysql_native_password')
+
+# cursor = conexao.cursor(buffered = True)
+# cursor.execute("USE banco;")
+# command = "SELECT * FROM clientes WHERE cpf = '{}'".format("1111")
+# cursor.execute(command)
+# for i in cursor:
+# 	conta = i
+
+# print(conta)
+# cursor.execute("UPDATE clientes SET nome = %s WHERE cpf = %s", ('aleff','1111'))
+# conexao.commit()
+# valor = float('100')
+# saldo: float = conta[2]
+# limite: float = conta[4]
+# dep = int(conta[0])
+# print("saldo de: {}\nlimite: {}".format(saldo, limite))
+# if saldo + valor > limite:
+# 	print("não deu")
+# else:
+# 	command = """UPDATE contas SET saldo = """ + str(saldo + valor) + """ WHERE numeros = """+str(dep)
+# 	cursor.execute(command)
+# 	conexao.commit()
 
 
 

@@ -16,11 +16,6 @@ from tela_incial import TelaInicial
 from tela_login import TelaLogin
 from tela_deposito import TelaDeposito
 
-ip = "localhost"
-port = 7003
-addr = ((ip, port))
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(addr)
 
 class Ui_Main(QtWidgets.QWidget):
 	def setupUi(self, Main):
@@ -72,14 +67,18 @@ class Ui_Main(QtWidgets.QWidget):
 		self.QtStack.addWidget(self.stack7)
 
 class Main(QMainWindow, Ui_Main):
-	_logado: tuple
-	_logado1: tuple
+	_logado: str
 	_pessoa: tuple
+
+	ip = "localhost"
+	port = 7022
+	addr = ((ip, port))
+	client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	client_socket.connect(addr)
+
 	def __init__(self, parent = None):
 		super(Main, self).__init__(parent)
 		self.setupUi(self)
-
-		self.banco = Cadastro()
 
 		self.tela_inicial.pushButton.clicked.connect(self.botaoAcessarConta)
 		self.tela_inicial.pushButton_2.clicked.connect(self.botaoCriarConta)
@@ -112,14 +111,14 @@ class Main(QMainWindow, Ui_Main):
 		cpf = self.tela_login.lineEdit.text()
 		senha = self.tela_login.lineEdit_2.text()
 		if not(cpf == '' or senha == ''):
-			msg = f"login,{cpf},{senha}"
-			if not(self.banco.login(cpf, senha)):
+			self.client_socket.send(f"login|{cpf}|{senha}".encode())
+			retorno = self.client_socket.recv(1024).decode().split(sep = '|')
+			if retorno[0] != 'logado':
 				QMessageBox.information(None, 'Login', 'CPF ou Senha incorretos')
 			else:
 				self.tela_login.lineEdit.setText('')
 				self.tela_login.lineEdit_2.setText('')
-				self._logado = self.banco.busca(cpf)
-				self._logado1 = self.banco.buscaP(cpf)
+				self._logado = retorno[1]
 				self.QtStack.setCurrentIndex(4)
 		else:
 			QMessageBox.warning(None, 'Login', 'Todos os campos devem ser preenchidos')
@@ -134,40 +133,38 @@ class Main(QMainWindow, Ui_Main):
 		self.QtStack.setCurrentIndex(7)
 	
 	def botaoCadastrar(self):
-		createTables()
 		nome = self.tela_cadastro_pessoa.lineEdit.text()
 		cpf = self.tela_cadastro_pessoa.lineEdit_2.text()
 		endereco = self.tela_cadastro_pessoa.lineEdit_3.text()
 		nascimento = self.tela_cadastro_pessoa.lineEdit_4.text()
 		senha = self.tela_cadastro_pessoa.lineEdit_5.text()
-		if self.banco.busca(cpf) != None:
+		
+		self.client_socket.send(f"criar|{nome}|{cpf}|{endereco}|{nascimento}|{senha}".encode())
+		retorno = self.client_socket.recv(1024).decode()
+		if retorno != 'conta criada':
 			QMessageBox.information(None, 'Cadastro', 'Pessoa já cadastrada')
 		else:
-			Cliente(nome, cpf, endereco, nascimento)
-			Conta(cpf, senha)
-		QMessageBox.information(None, 'Conta', 'Conta cadastrada com sucesso')
-		self.tela_cadastro_pessoa.lineEdit.setText('')
-		self.tela_cadastro_pessoa.lineEdit_2.setText('')
-		self.tela_cadastro_pessoa.lineEdit_3.setText('')
-		self.tela_cadastro_pessoa.lineEdit_4.setText('')
-		self.tela_cadastro_pessoa.lineEdit_5.setText('')
-		self.QtStack.setCurrentIndex(0)
+			QMessageBox.information(None, 'Conta', 'Conta cadastrada com sucesso')
+			self.tela_cadastro_pessoa.lineEdit.setText('')
+			self.tela_cadastro_pessoa.lineEdit_2.setText('')
+			self.tela_cadastro_pessoa.lineEdit_3.setText('')
+			self.tela_cadastro_pessoa.lineEdit_4.setText('')
+			self.tela_cadastro_pessoa.lineEdit_5.setText('')
+			self.QtStack.setCurrentIndex(0)
 
 	def botaoDepositar(self):
 		conta = self.tela_deposito.lineEdit.text()
 		valor = self.tela_deposito.lineEdit_2.text()
 		if not(conta == '' or valor == ''):
-			conta_destino = self.banco.buscaC(conta)
-			if conta_destino != None:
-				if deposita(float(valor), conta_destino):
-					QMessageBox.information(None, 'Deposito', 'Deposito realizado com sucesso')
-					self.tela_deposito.lineEdit.setText('')
-					self.tela_deposito.lineEdit_2.setText('')
-					self.QtStack.setCurrentIndex(0)
-				else:
-				 	QMessageBox.information(None, 'Deposito', 'limite insuficiente')
+			self.client_socket.send(f"deposito|{conta}|{valor}".encode())
+			retorno = self.client_socket.recv(1024).decode()
+			if retorno == 'depositado':
+				QMessageBox.information(None, 'Deposito', 'Deposito realizado com sucesso')
+				self.tela_deposito.lineEdit.setText('')
+				self.tela_deposito.lineEdit_2.setText('')
+				self.QtStack.setCurrentIndex(0)
 			else:
-				QMessageBox.information(None, 'Deposito', 'Conta não encontrada')
+				 	QMessageBox.information(None, 'Deposito', 'limite insuficiente')
 		else:
 			QMessageBox.information(None, 'Deposito', 'Preencha todos os campos')
 
@@ -175,23 +172,24 @@ class Main(QMainWindow, Ui_Main):
 		conta = self.tela_transferencia.lineEdit.text()
 		valor = float(self.tela_transferencia.lineEdit_2.text())
 		if not(conta == '' or valor == ''):
-			conta_destino = self.banco.buscaC(conta)
-			nome = self.banco.buscaP(conta_destino[1])
-			if conta_destino != None:
-				if transferir(valor, self._logado, self._logado1[0], conta_destino, nome[0]):
-					QMessageBox.information(None, 'Transferência', 'Transfêrencia realizada com sucesso')
-					self.tela_transferencia.lineEdit.setText('')
-					self.tela_transferencia.lineEdit_2.setText('')
-					self.QtStack.setCurrentIndex(4)
-				else:
-				 	QMessageBox.information(None, 'Transferência', 'Transferência não pode ser realizada')
+			self.client_socket.send(f"transfere|{valor}|{self._logado}|{conta}".encode())
+			retorno = self.client_socket.recv(1024).decode()
+			if retorno == 'feito':
+				QMessageBox.information(None, 'Transferência', 'Transfêrencia realizada com sucesso')
+				self.tela_transferencia.lineEdit.setText('')
+				self.tela_transferencia.lineEdit_2.setText('')
+				self.QtStack.setCurrentIndex(4)
+			else:
+				QMessageBox.information(None, 'Transferência', 'Transferência não pode ser realizada')
 		else:
 			QMessageBox.information(None, 'Transferencia', 'Preencha todos os campos')
 		
 		
 	def botaoSacar(self):
 		valor = float(self.tela_saque.lineEdit.text())
-		if sacar(valor, self._logado):
+		self.client_socket.send(f"sacar|{self._logado}|{valor}".encode())
+		retorno = self.client_socket.recv(1024).decode()
+		if retorno == 'sacado':
 			QMessageBox.information(None, 'Saque', 'Saque realizado com sucesso')
 			self.tela_transferencia.lineEdit.setText('')
 			self.QtStack.setCurrentIndex(4)
@@ -206,13 +204,16 @@ class Main(QMainWindow, Ui_Main):
 		self.QtStack.setCurrentIndex(2)
 
 	def abrirTelaExtrato(self):
+		self.client_socket.send(f"extrato|{self._logado}".encode())
+		recebido = self.client_socket.recv(10240).decode()
+		ext = recebido.split(sep = "|")
 		self.tela_extrato.listWidget.clear()
-		self.tela_extrato.listWidget.addItem("Nome: {}".format(self._logado1[0]))
-		self.tela_extrato.listWidget.addItem("CPF: {}".format(self._logado[1]))
-		self.tela_extrato.listWidget.addItem("Numero da conta: {}".format(self._logado[0]))
-		self.tela_extrato.listWidget.addItem("Saldo: {}".format(self._logado[2]))
+		self.tela_extrato.listWidget.addItem("Nome: {}".format(ext[0]))
+		self.tela_extrato.listWidget.addItem("CPF: {}".format(ext[1]))
+		self.tela_extrato.listWidget.addItem("Numero da conta: {}".format(ext[2]))
+		self.tela_extrato.listWidget.addItem("Saldo: {}".format(ext[3]))
 		self.tela_extrato.listWidget.addItem("Transações:")
-		self.tela_extrato.listWidget.addItem("{}".format(self._logado[5]))
+		self.tela_extrato.listWidget.addItem("{}".format(ext[4]))
 		self.QtStack.setCurrentIndex(3)
 
 	def botaoVoltar(self):
@@ -221,8 +222,9 @@ class Main(QMainWindow, Ui_Main):
 	def botaoSair(self):
 		self.QtStack.setCurrentIndex(0)
 		
-	def desconectar():
-		client_socket.close()
+	def desconectar(self):
+		self.client_socket.send("bye".encode())
+		self.client_socket.close()
 		sys.exit()
 
 if __name__ == "__main__":

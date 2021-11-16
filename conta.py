@@ -8,7 +8,7 @@ class Conta:
 		host = "localhost",
 		user = "root",
 		db = "banco",
-		password = "7650FNAF", 
+		password = "Ericly$2", 
 		auth_plugin = 'mysql_native_password')
 
 	cursor = conexao.cursor(buffered = True)
@@ -28,8 +28,6 @@ class Conta:
 	_numeroContas = 0
 	__slots__ = ['_numero', '_titular', '_saldo', '_senha', '_limite', '_historico']
 	def __init__(self, titular: str,senha, saldo = 0, limite = 1000):
-
-		Conta._numeroContas += 1
 
 		Conta.cursor.execute(
         """
